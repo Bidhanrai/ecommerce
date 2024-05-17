@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89342887866",
+    "project_id": "emcommerce-4a322",
+    "storage_bucket": "emcommerce-4a322.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89342887866:android:81e50230d6b3dae90d3f83",
+        "android_client_info": {
+          "package_name": "com.example.shoes_ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOC--uALjBVxe8u7z0r8oMJwh174wwjoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
