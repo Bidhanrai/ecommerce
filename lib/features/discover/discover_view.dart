@@ -7,7 +7,7 @@ import 'package:shoes_ecommerce/features/cart/cubit/cart_state.dart';
 import 'package:shoes_ecommerce/features/discover/cubit/discover_cubit.dart';
 import 'package:shoes_ecommerce/features/discover/cubit/discover_state.dart';
 import 'package:shoes_ecommerce/features/discover/model/brand.dart';
-import 'package:shoes_ecommerce/features/filter.dart';
+import 'package:shoes_ecommerce/features/filter/filter.dart';
 import 'package:shoes_ecommerce/features/product/product_detail_view.dart';
 import 'package:shoes_ecommerce/widgets/loading_widget.dart';
 import '../../constants/app_colors.dart';
@@ -15,8 +15,9 @@ import '../../widgets/badge_widget.dart';
 import '../../widgets/get_brand_image.dart';
 import '../../widgets/svg_widget.dart';
 import '../cart/cart_view.dart';
+import '../filter/cubit/filter_cubit.dart';
 import '../settings_view.dart';
-import 'model/product.dart';
+import '../product/models/product.dart';
 
 class DiscoverView extends StatefulWidget {
   const DiscoverView({super.key});
@@ -33,7 +34,10 @@ class _DiscoverViewState extends State<DiscoverView> {
         child: Column(
           children: [
             _appBar(),
-            _brandsFilter(),
+            ///When filter applied do not show brands list
+            context.watch<FilterCubit>().filterCount != 0
+                ? const SizedBox()
+                : _brandsFilter(),
             Expanded(
               child: BlocBuilder<DiscoverCubit, DiscoverState>(
                 builder: (context, state) {
@@ -43,18 +47,32 @@ class _DiscoverViewState extends State<DiscoverView> {
                     case AppStatus.failure:
                       return const Center(child: Text("Error"),);
                     default:
+                      if(state.products.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            "No products for selected filter.\nTry changing the filers !",
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
                       return NotificationListener(
                         onNotification: (ScrollNotification onScroll) {
-                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent - 50) {
+                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent+100) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               /// Loading more products
-                              context.read<DiscoverCubit>().loadMoreProducts();
+                              if(context.read<FilterCubit>().filterCount != 0) {
+                                context.read<DiscoverCubit>().loadMoreFilteredProducts(context.read<FilterCubit>().state);
+                              } else {
+                                context.read<DiscoverCubit>().loadMoreProducts();
+                              }
                             });
                           }
                           return true;
                         },
                         child: GridView.builder(
                           itemCount: state.products.length,
+                          physics: const BouncingScrollPhysics(),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 16,
@@ -99,19 +117,19 @@ class _DiscoverViewState extends State<DiscoverView> {
           backgroundColor: AppColor.black,
           padding: const EdgeInsets.symmetric(horizontal: 20),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             BadgeWidget(
-              highlight: false,
-              child: SvgWidget(
+              highlight: context.watch<FilterCubit>().filterCount != 0,
+              child: const SvgWidget(
                 svgPath: "assets/icons/filter.svg",
                 color: Colors.white,
               ),
             ),
-            SizedBox(width: 12),
-            Text(
+            const SizedBox(width: 12),
+            const Text(
               "FILTER",
               style: TextStyle(
                 color: Colors.white,
@@ -179,15 +197,17 @@ class _DiscoverViewState extends State<DiscoverView> {
 
   Widget _brandsFilter() {
     return BlocBuilder<DiscoverCubit, DiscoverState>(builder: (context, state) {
+      List<Brand> brandListWithAll = [...state.brands];
+      brandListWithAll.insert(0, const Brand(id: "-1", name: "All", image: ""));
       return SizedBox(
         height: 40,
         child: ListView.separated(
           separatorBuilder: (context, index) => const SizedBox(width: 0),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           scrollDirection: Axis.horizontal,
-          itemCount: state.brands.length,
+          itemCount: brandListWithAll.length,
           itemBuilder: (context, index) {
-            Brand brand = state.brands[index];
+            Brand brand = brandListWithAll[index];
             return InkWell(
               onTap: () {
                 context.read<DiscoverCubit>().selectBrand(brand);

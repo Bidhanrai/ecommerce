@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoes_ecommerce/features/discover/model/product.dart';
+import 'package:shoes_ecommerce/features/product/models/product.dart';
 import 'package:shoes_ecommerce/services/auth_service.dart';
 import '../../../constants/app_status.dart';
 import '../../../services/service_locator.dart';

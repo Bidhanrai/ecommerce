@@ -13,7 +13,7 @@ import '../../constants/app_colors.dart';
 import '../../widgets/primary_button.dart';
 import '../cart/cart_view.dart';
 import '../cart/cubit/cart_state.dart';
-import '../discover/model/product.dart';
+import 'models/product.dart';
 import '../review/widget/ratings_widget.dart';
 import '../review/widget/review_card.dart';
 

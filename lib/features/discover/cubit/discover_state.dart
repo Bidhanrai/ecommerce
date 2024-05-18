@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:shoes_ecommerce/constants/app_status.dart';
 import 'package:shoes_ecommerce/features/discover/model/brand.dart';
-import '../model/product.dart';
+import '../../product/models/product.dart';
 
 class DiscoverState extends Equatable {
   final AppStatus appStatus;

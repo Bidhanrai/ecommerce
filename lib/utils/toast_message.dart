@@ -5,9 +5,9 @@ toastMessage({
   required dynamic message,
   Color backgroundColor = Colors.black,
   Color textColor = Colors.white,
-  int timeInSecForIosWeb = 3,
-  Toast toastLength = Toast.LENGTH_LONG,
-  ToastGravity gravity = ToastGravity.BOTTOM,
+  int timeInSecForIosWeb = 2,
+  Toast toastLength = Toast.LENGTH_SHORT,
+  ToastGravity gravity = ToastGravity.CENTER,
 }) {
   Fluttertoast.showToast(
     msg: "$message",

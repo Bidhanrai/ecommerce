@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:shoes_ecommerce/constants/app_status.dart';
-import '../../discover/model/product.dart';
+import '../models/product.dart';
 import '../../review/model/review.dart';
 
 class ProductState extends Equatable {

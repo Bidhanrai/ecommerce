@@ -9,7 +9,7 @@ import 'package:shoes_ecommerce/widgets/loading_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../services/service_locator.dart';
 import '../../widgets/primary_button.dart';
-import '../discover/model/product.dart';
+import '../product/models/product.dart';
 import 'cubit/cart_cubit.dart';
 import 'cubit/cart_state.dart';
 import 'model/cart.dart';

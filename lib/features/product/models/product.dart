@@ -10,7 +10,7 @@ class Product extends Equatable{
   final List<int> size;
   final List<String> color;
   final int price;
-  final String gender;
+  final Gender gender;
   final DateTime createdDate;
 
   const Product({
@@ -36,7 +36,11 @@ class Product extends Equatable{
       brand: doc.data()!["brand"],
       size: (doc.data()!["size"] as List).map((e) => int.parse("$e")).toList(),
       createdDate: (doc.data()!["createdDate"] as Timestamp).toDate(),
-      gender: doc.data()!["gender"],
+      gender: doc.data()!["gender"] == "M"
+          ? Gender.m
+          : doc.data()!["gender"] == "F"
+              ? Gender.f
+              : Gender.u,
       price: doc.data()!["price"],
       color: (doc.data()!["color"] as List).map((e) => "$e").toList(),
     );
@@ -44,4 +48,13 @@ class Product extends Equatable{
 
   @override
   List<Object?> get props => [id, name, description, brand, createdDate, gender, price, color, size, imageUrl];
+}
+
+enum Gender {
+  m("Male"),
+  f("Female"),
+  u("Unisex");
+
+  final String value;
+  const Gender(this.value);
 }
