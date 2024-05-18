@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoes_ecommerce/features/cart/cubit/cart_cubit.dart';
+import 'package:shoes_ecommerce/features/discover/cubit/discover_cubit.dart';
 import 'package:shoes_ecommerce/services/auth_service.dart';
 import 'package:shoes_ecommerce/services/navigation_service/navigation_service.dart';
 import 'package:shoes_ecommerce/utils/app_theme.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_)=>CartCubit(locator<AuthService>().user?.uid), lazy: false),
+        BlocProvider(create: (_)=>DiscoverCubit(), lazy: false),
       ],
       child: MaterialApp(
         title: 'Shoes Mart',

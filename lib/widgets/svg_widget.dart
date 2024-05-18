@@ -6,6 +6,7 @@ class SvgWidget extends StatelessWidget {
   final Color? color;
   final double? height;
   final double? width;
+  final bool isAsset;
 
   const SvgWidget({
     super.key,
@@ -13,18 +14,29 @@ class SvgWidget extends StatelessWidget {
     this.color,
     this.height,
     this.width,
+    this.isAsset = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      svgPath,
-      colorFilter: color!=null
-          ? ColorFilter.mode(color!, BlendMode.srcIn)
-          : null,
-      height: height,
-      width: width,
-      fit: BoxFit.scaleDown,
-    );
+    return isAsset
+        ? SvgPicture.asset(
+            svgPath,
+            colorFilter: color != null
+                ? ColorFilter.mode(color!, BlendMode.srcIn)
+                : null,
+            height: height,
+            width: width,
+            fit: BoxFit.scaleDown,
+          )
+        : SvgPicture.network(
+            svgPath,
+            colorFilter: color != null
+                ? ColorFilter.mode(color!, BlendMode.srcIn)
+                : null,
+            height: height,
+            width: width,
+            fit: BoxFit.scaleDown,
+          );
   }
 }

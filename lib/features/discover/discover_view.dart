@@ -28,24 +28,32 @@ class DiscoverView extends StatefulWidget {
 class _DiscoverViewState extends State<DiscoverView> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DiscoverCubit>(
-      create: (_) => DiscoverCubit(),
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              _appBar(),
-              _brandsFilter(),
-              Expanded(
-                child: BlocBuilder<DiscoverCubit, DiscoverState>(
-                  builder: (context, state) {
-                    switch(state.appStatus) {
-                      case AppStatus.loading:
-                        return const LoadingWidget();
-                      case AppStatus.failure:
-                        return const Center(child: Text("Error"),);
-                      default:
-                        return GridView.builder(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            _appBar(),
+            _brandsFilter(),
+            Expanded(
+              child: BlocBuilder<DiscoverCubit, DiscoverState>(
+                builder: (context, state) {
+                  switch(state.appStatus) {
+                    case AppStatus.loading:
+                      return const LoadingWidget();
+                    case AppStatus.failure:
+                      return const Center(child: Text("Error"),);
+                    default:
+                      return NotificationListener(
+                        onNotification: (ScrollNotification onScroll) {
+                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent - 50) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              /// Loading more products
+                              context.read<DiscoverCubit>().loadMoreProducts();
+                            });
+                          }
+                          return true;
+                        },
+                        child: GridView.builder(
                           itemCount: state.products.length,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
@@ -65,45 +73,52 @@ class _DiscoverViewState extends State<DiscoverView> {
                           itemBuilder: (context, index) {
                             return _product(state.products[index]);
                           },
-                        );
-                    }
-                  },
-                ),
+                        ),
+                      );
+                  }
+                },
               ),
-            ],
-          ),
+            ),
+            BlocBuilder<DiscoverCubit, DiscoverState>(
+              builder: (context, state) {
+                return state.paginating
+                    ? const LoadingWidget()
+                    : const SizedBox();
+              },
+            ),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: TextButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FilterView()));
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: AppColor.black,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BadgeWidget(
-                highlight: false,
-                child: SvgWidget(
-                  svgPath: "assets/icons/filter.svg",
-                  color: Colors.white,
-                ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: TextButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const FilterView()));
+        },
+        style: TextButton.styleFrom(
+          backgroundColor: AppColor.black,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            BadgeWidget(
+              highlight: false,
+              child: SvgWidget(
+                svgPath: "assets/icons/filter.svg",
+                color: Colors.white,
               ),
-              SizedBox(width: 12),
-              Text(
-                "FILTER",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
+            ),
+            SizedBox(width: 12),
+            Text(
+              "FILTER",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -221,7 +236,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: GetBrandImage(brandName: product.brand),
+                    child: GetBrandImage(brandId: product.brand),
                   ),
                   Expanded(child: Image.network(product.imageUrl)),
                 ],
@@ -235,28 +250,28 @@ class _DiscoverViewState extends State<DiscoverView> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          //TODO: use cloud functions to fetch review details
-          // const SizedBox(height: 4),
-          // const Row(
-          //   children: [
-          //     Icon(Icons.star_rounded, color: AppColor.yellow),
-          //     SizedBox(width: 4),
-          //     Text.rich(
-          //       TextSpan(
-          //         text: "4.5",
-          //         style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
-          //         children: <TextSpan>[
-          //           TextSpan(
-          //             style: TextStyle(
-          //                 fontWeight: FontWeight.w400,
-          //                 color: AppColor.lightGrey),
-          //             text: "  (104 Reviews)",
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          // TODO: use cloud functions to fetch review details
+          const SizedBox(height: 4),
+          const Row(
+            children: [
+              Icon(Icons.star_rounded, color: AppColor.yellow),
+              SizedBox(width: 4),
+              Text.rich(
+                TextSpan(
+                  text: "4.5",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
+                  children: <TextSpan>[
+                    TextSpan(
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.lightGrey),
+                      text: "  (104 Reviews)",
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 4),
           Text(
             "\$${product.price}",
