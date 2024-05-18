@@ -5,6 +5,7 @@ import '../../product/models/product.dart';
 
 class DiscoverState extends Equatable {
   final AppStatus appStatus;
+  final String? errorMessage;
   final bool paginating;
   final Brand selectedBrand;
   final List<Brand> brands;
@@ -16,6 +17,7 @@ class DiscoverState extends Equatable {
     this.appStatus = AppStatus.init,
     this.brands = const [],
     this.paginating = false,
+    this.errorMessage,
   });
 
   DiscoverState copyWith({
@@ -24,6 +26,7 @@ class DiscoverState extends Equatable {
     List<Product>? products,
     List<Brand>? brands,
     bool? paginating,
+    String? errorMessage,
   }) {
     return DiscoverState(
       appStatus: appStatus ?? this.appStatus,
@@ -31,9 +34,10 @@ class DiscoverState extends Equatable {
       products: products ?? this.products,
       brands: brands ?? this.brands,
       paginating: paginating ?? this.paginating,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [selectedBrand, products, brands, appStatus, paginating];
+  List<Object?> get props => [selectedBrand, products, brands, appStatus, paginating, errorMessage];
 }

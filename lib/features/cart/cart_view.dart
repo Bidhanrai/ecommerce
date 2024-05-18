@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -118,7 +119,7 @@ class _CartViewState extends State<CartView> {
             color: AppColor.grey,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Image.network(product.imageUrl),
+          child: CachedNetworkImage(imageUrl: product.imageUrl),
         ),
         const SizedBox(width: 16),
         Expanded(

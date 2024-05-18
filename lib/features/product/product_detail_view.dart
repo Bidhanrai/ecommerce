@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoes_ecommerce/constants/app_status.dart';
@@ -10,6 +11,7 @@ import 'package:shoes_ecommerce/widgets/badge_widget.dart';
 import 'package:shoes_ecommerce/widgets/shimmer_widget.dart';
 import 'package:shoes_ecommerce/widgets/svg_widget.dart';
 import '../../constants/app_colors.dart';
+import '../../core/error_component.dart';
 import '../../widgets/primary_button.dart';
 import '../cart/cart_view.dart';
 import '../cart/cubit/cart_state.dart';
@@ -116,10 +118,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                 .selectColor(widget.product.color[value]);
                           },
                           itemBuilder: (context, index) {
-                            return Image.network(widget.product.imageUrl);
+                            return CachedNetworkImage(imageUrl: widget.product.imageUrl);
                           },
                         )
-                      : Image.network(widget.product.imageUrl),
+                      : CachedNetworkImage(imageUrl: widget.product.imageUrl),
                 ),
 
                 ///Color indicator
@@ -305,7 +307,12 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             ],
           );
         case AppStatus.failure:
-          return ErrorWidget("Issue while fetching reviews");
+          return ErrorComponent(
+            exception: state.errorMessage,
+            retry: () => context
+                .read<ProductCubit>()
+                .fetchReviews(widget.product.id),
+          );
         default:
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

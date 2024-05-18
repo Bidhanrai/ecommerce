@@ -7,6 +7,7 @@ class Review extends Equatable {
   final String reviewText;
   final DateTime createdDate;
   final String userId;
+  final String userName;
   final String productId;
 
   const Review({
@@ -16,6 +17,7 @@ class Review extends Equatable {
     required this.createdDate,
     required this.productId,
     required this.userId,
+    required this.userName,
   });
 
   factory Review.fromJson(Map<String, dynamic> doc) {
@@ -26,9 +28,10 @@ class Review extends Equatable {
       reviewStar: doc["reviewStar"],
       reviewText: doc["reviewText"],
       userId: doc["userId"],
+      userName: doc["userName"],
     );
   }
 
   @override
-  List<Object?> get props => [id, userId, productId, reviewText, reviewStar, createdDate];
+  List<Object?> get props => [id, userId, productId, reviewText, reviewStar, createdDate, userName];
 }

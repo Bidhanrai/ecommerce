@@ -50,8 +50,9 @@ dependencies:
   google_sign_in: ^6.2.1
   get_it: ^7.7.0
   fluttertoast: ^8.2.5
-  shimmer:
-  collection:
+  shimmer: ^3.0.0
+  collection: ^1.18.0
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:

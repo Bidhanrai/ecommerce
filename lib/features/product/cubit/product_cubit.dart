@@ -29,7 +29,7 @@ class ProductCubit extends Cubit<ProductState> {
         emit(state.copyWith(reviewStatus: AppStatus.success));
       }
     } catch (e) {
-      emit(state.copyWith(reviewStatus: AppStatus.failure));
+      emit(state.copyWith(reviewStatus: AppStatus.failure, errorMessage: "$e"));
     }
   }
 

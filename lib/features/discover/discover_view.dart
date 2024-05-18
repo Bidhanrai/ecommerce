@@ -11,7 +11,9 @@ import 'package:shoes_ecommerce/features/filter/filter.dart';
 import 'package:shoes_ecommerce/features/product/product_detail_view.dart';
 import 'package:shoes_ecommerce/widgets/loading_widget.dart';
 import '../../constants/app_colors.dart';
+import '../../core/error_component.dart';
 import '../../widgets/badge_widget.dart';
+import '../../widgets/cached_image_widget.dart';
 import '../../widgets/get_brand_image.dart';
 import '../../widgets/svg_widget.dart';
 import '../cart/cart_view.dart';
@@ -45,7 +47,12 @@ class _DiscoverViewState extends State<DiscoverView> {
                     case AppStatus.loading:
                       return const LoadingWidget();
                     case AppStatus.failure:
-                      return const Center(child: Text("Error"),);
+                      return ErrorComponent(
+                        exception: state.errorMessage,
+                        retry: () => context
+                            .read<DiscoverCubit>()
+                            .fetchProductsAndBrands(),
+                      );
                     default:
                       if(state.products.isEmpty) {
                         return const Center(
@@ -58,7 +65,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                       }
                       return NotificationListener(
                         onNotification: (ScrollNotification onScroll) {
-                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent+100) {
+                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent+50) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               /// Loading more products
                               if(context.read<FilterCubit>().filterCount != 0) {
@@ -258,7 +265,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                     alignment: Alignment.topLeft,
                     child: GetBrandImage(brandId: product.brand),
                   ),
-                  Expanded(child: Image.network(product.imageUrl)),
+                  Expanded(child: CachedImageWidget(imageUrl: product.imageUrl)),
                 ],
               ),
             ),
