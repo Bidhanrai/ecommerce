@@ -3,7 +3,9 @@ const {fetchProducts} = require("./general");
 
 exports.fetchProducts = functions.https.onCall(async (data, context) => {
   // console.log(data);
-  // checkAuthentication(context);
+  if(!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+  }
 
   return await fetchProducts(data);
 });
