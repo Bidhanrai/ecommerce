@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,18 +12,19 @@ import 'product_state.dart';
 class ProductCubit extends Cubit<ProductState> {
   ProductCubit(super.initialState);
 
-  final _db = FirebaseFirestore.instance;
+  final _reviewRef = FirebaseFirestore.instance.collection("reviews");
+  final _cartRef = FirebaseFirestore.instance.collection("carts");
 
   fetchReviews(String docId) async {
     emit(state.copyWith(reviewStatus: AppStatus.loading));
     try {
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _db.collection("reviews").doc(docId).get();
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _reviewRef.doc(docId).get();
       if(documentSnapshot.data() != null) {
         List<Review> reviews = (documentSnapshot.data()!["data"] as List)
             .map((docSnapshot) => Review.fromJson(docSnapshot))
             .toList();
         emit(state.copyWith(reviewStatus: AppStatus.success, reviews: reviews));
-        calculateAverageRatings();
+        // calculateAverageRatings();
       } else {
         emit(state.copyWith(reviewStatus: AppStatus.success));
       }
@@ -33,11 +33,11 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  calculateAverageRatings() {
-    List<int> ratings = state.reviews.map((e) => e.reviewStar).toList();
-    double average = ratings.sum/ratings.length;
-    emit(state.copyWith(averageRating: average));
-  }
+  // calculateAverageRatings() {
+  //   List<int> ratings = state.reviews.map((e) => e.reviewStar).toList();
+  //   double average = ratings.sum/ratings.length;
+  //   emit(state.copyWith(averageRating: average));
+  // }
 
 
   selectColor(String color) {
@@ -51,8 +51,7 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   addToCart(VoidCallback onSuccess) async {
-    CollectionReference carts =  _db.collection('carts');
-    return await carts.doc(locator<AuthService>().user?.uid).set({
+    return await _cartRef.doc(locator<AuthService>().user?.uid).set({
       "data": FieldValue.arrayUnion([CartData(quantity: state.quantity, size: state.productSize, color: state.productColor, productId: state.product.id).toJson()])
     }, SetOptions(merge: true)).then(
           (value) {

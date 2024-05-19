@@ -65,21 +65,19 @@ class _DiscoverViewState extends State<DiscoverView> {
                       }
                       return NotificationListener(
                         onNotification: (ScrollNotification onScroll) {
-                          if (onScroll.metrics.pixels >= onScroll.metrics.maxScrollExtent+50) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              /// Loading more products
-                              if(context.read<FilterCubit>().filterCount != 0) {
-                                context.read<DiscoverCubit>().loadMoreFilteredProducts(context.read<FilterCubit>().state);
-                              } else {
-                                context.read<DiscoverCubit>().loadMoreProducts();
-                              }
-                            });
+                          if (onScroll.metrics.pixels > onScroll.metrics.maxScrollExtent+40) {
+                            /// Loading more products
+                            if(context.read<FilterCubit>().filterCount != 0) {
+                              context.read<DiscoverCubit>().loadMoreFilteredProducts(context.read<FilterCubit>().state);
+                            } else {
+                              context.read<DiscoverCubit>().loadMoreProducts();
+                            }
                           }
                           return true;
                         },
                         child: GridView.builder(
-                          itemCount: state.products.length,
                           physics: const BouncingScrollPhysics(),
+                          itemCount: state.products.length,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 16,
@@ -277,28 +275,36 @@ class _DiscoverViewState extends State<DiscoverView> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          // TODO: use cloud functions to fetch review details
           const SizedBox(height: 4),
-          const Row(
-            children: [
-              Icon(Icons.star_rounded, color: AppColor.yellow),
-              SizedBox(width: 4),
-              Text.rich(
-                TextSpan(
-                  text: "4.5",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
-                  children: <TextSpan>[
-                    TextSpan(
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.lightGrey),
-                      text: "  (104 Reviews)",
+          product.totalReviewCount == 0
+              ? const Text(
+                  "No review yet",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.lightGrey,
+                  ),
+                )
+              : Row(
+                  children: [
+                    const Icon(Icons.star_rounded, color: AppColor.yellow),
+                    const SizedBox(width: 4),
+                    Text.rich(
+                      TextSpan(
+                        text: "${product.averageStar}",
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
+                        children: <TextSpan>[
+                          TextSpan(
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: AppColor.lightGrey,
+                            ),
+                            text: "  (${product.totalReviewCount} Reviews)",
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
           const SizedBox(height: 4),
           Text(
             "\$${product.price}",

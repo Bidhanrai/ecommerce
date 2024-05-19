@@ -261,36 +261,36 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   }
 
   Widget _averageRating() {
-    return BlocBuilder<ProductCubit, ProductState>(builder: (context, state) {
-      switch (state.reviewStatus) {
-        case AppStatus.loading:
-          return const Text("...");
-        default:
-          return state.reviews.isNotEmpty
-              ? Row(
-                  children: [
-                    RatingsWidget(ratings: state.averageRating.toInt()),
-                    const SizedBox(width: 4),
-                    Text.rich(
-                      TextSpan(
-                        text: "${state.averageRating}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 11),
-                        children: <TextSpan>[
-                          TextSpan(
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.lightGrey),
-                            text: "  (${state.reviews.length} ${state.reviews.length >1?"Reviews":"Review"})",
-                          ),
-                        ],
-                      ),
+    return widget.product.totalReviewCount == 0
+        ? const Text(
+            "No review yet",
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: AppColor.lightGrey,
+            ),
+          )
+        : Row(
+            children: [
+              RatingsWidget(ratings: widget.product.averageStar),
+              const SizedBox(width: 4),
+              Text.rich(
+                TextSpan(
+                  text: "${widget.product.averageStar}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 11),
+                  children: <TextSpan>[
+                    TextSpan(
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.lightGrey),
+                      text:
+                          "  (${widget.product.totalReviewCount} ${widget.product.totalReviewCount > 1 ? "Reviews" : "Review"})",
                     ),
                   ],
-                )
-              : const SizedBox();
-      }
-    });
+                ),
+              ),
+            ],
+          );
   }
 
   Widget _review() {

@@ -12,6 +12,8 @@ class Product extends Equatable{
   final int price;
   final Gender gender;
   final DateTime createdDate;
+  final int averageStar;
+  final int totalReviewCount;
 
   const Product({
     required this.id,
@@ -24,18 +26,41 @@ class Product extends Equatable{
     required this.price,
     required this.gender,
     required this.createdDate,
+    this.averageStar = 0,
+    this.totalReviewCount = 0,
   });
 
 
-  factory Product.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory Product.fromJson(Map<dynamic, dynamic> doc) {
     return Product(
-      id: doc.id,
+      id: doc["id"],
+      name: doc["name"],
+      imageUrl: doc["imageUrl"],
+      description: doc["description"],
+      brand: doc["brand"],
+      size: (doc["size"] as List).map((e) => int.parse("$e")).toList(),
+      createdDate: DateTime.parse(doc["createdDate"]),
+      gender: doc["gender"] == "M"
+          ? Gender.m
+          : doc["gender"] == "F"
+          ? Gender.f
+          : Gender.u,
+      price: doc["price"],
+      color: (doc["color"] as List).map((e) => "$e").toList(),
+      averageStar: doc["averageStar"]??0,
+      totalReviewCount: doc["totalReviewCount"]??0,
+    );
+  }
+
+  factory Product.fromDocumentSnapshot(DocumentSnapshot<Map<dynamic, dynamic>> doc) {
+    return Product(
+      id: doc.data()!["id"],
       name: doc.data()!["name"],
       imageUrl: doc.data()!["imageUrl"],
       description: doc.data()!["description"],
       brand: doc.data()!["brand"],
       size: (doc.data()!["size"] as List).map((e) => int.parse("$e")).toList(),
-      createdDate: (doc.data()!["createdDate"] as Timestamp).toDate(),
+      createdDate: DateTime.parse(doc.data()!["createdDate"]),
       gender: doc.data()!["gender"] == "M"
           ? Gender.m
           : doc.data()!["gender"] == "F"
@@ -43,11 +68,13 @@ class Product extends Equatable{
               : Gender.u,
       price: doc.data()!["price"],
       color: (doc.data()!["color"] as List).map((e) => "$e").toList(),
+      averageStar: doc.data()!["averageStar"]??0,
+      totalReviewCount: doc.data()!["totalReviewCount"]??0,
     );
   }
 
   @override
-  List<Object?> get props => [id, name, description, brand, createdDate, gender, price, color, size, imageUrl];
+  List<Object?> get props => [id, name, description, brand, createdDate, gender, price, color, size, imageUrl, averageStar, totalReviewCount];
 }
 
 enum Gender {

@@ -21,6 +21,7 @@ class GetBrandImage extends StatelessWidget {
               isAsset: false,
               svgPath: brand.image,
               color: AppColor.lightGrey,
+              height: 24,
             )
           : const SizedBox();
     }
