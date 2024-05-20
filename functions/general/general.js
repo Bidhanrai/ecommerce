@@ -43,10 +43,6 @@ exports.fetchProducts = async (data) => {
 
 
 exports.filterProducts = async (data) => {
-  // final Brand? selectedBrand;
-//   final SortBy? selectedSortBy;
-
-  // {"price": {"min": "sdaf", "max": "safs"}}}
   const products = await requestGetCollection({
     collection: "products",
     lastProductId: data.lastProductId,

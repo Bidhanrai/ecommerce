@@ -16,6 +16,15 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
+
+  final TextEditingController _userName = TextEditingController();
+
+  @override
+  void dispose() {
+    _userName.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthCubit>(
@@ -25,12 +34,30 @@ class _AuthViewState extends State<AuthView> {
           return Stack(
             children: [
               Center(
-                child: Button.outlined(
-                  label: "Continue with google",
-                  prefixIcon: Image.asset("assets/icons/google.jpg", height: 20, width: 20,),
-                  onTap: () {
-                    context.read<AuthCubit>().signIn(context);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Button.outlined(
+                        label: "Continue with google",
+                        prefixIcon: Image.asset("assets/icons/google.jpg", height: 20, width: 20,),
+                        onTap: () {
+                          context.read<AuthCubit>().signIn(context);
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("Guest Login"),
+                        ),
+                        onTap: () {
+                          context.read<AuthCubit>().signInAnonymously();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               state.appStatus == AppStatus.loading

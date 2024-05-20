@@ -50,11 +50,7 @@ const requestGetCollection = async ({collection, lastProductId, payload}) => {
       query = query.orderBy("id");
       query = query.startAfter(lastProductDoc.createdDate, lastProductId);
     }
-  } 
-  // else if (sortBy == "Highest reviews") {
-  //   console.log("Highest review");
-  // } 
-  else {
+  } else {
     if (lastProductId) {
       query = query.orderBy("id").startAfter(lastProductId);
     } else {

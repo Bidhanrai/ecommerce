@@ -27,7 +27,7 @@ class _SettingsViewState extends State<SettingsView> {
           children: [
             const Text("Signed in as"),
             Text(
-              "${locator<AuthService>().user?.email}",
+              locator<AuthService>().user?.email??"Guest",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
@@ -36,10 +36,8 @@ class _SettingsViewState extends State<SettingsView> {
               label: "Logout",
               onTap: () async {
                 try {
-                  bool success = await locator<AuthService>().signOutFromGoogle();
-                  if(success) {
-                    locator<NavigationService>().pushAndRemoveUntil(authView);
-                  }
+                  await locator<AuthService>().signOutFromGoogle();
+                  locator<NavigationService>().pushAndRemoveUntil(authView);
                 } catch(e) {
                   toastMessage(message: "$e");
                 }

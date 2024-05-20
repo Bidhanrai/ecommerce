@@ -26,15 +26,17 @@ class AuthService {
     }
   }
 
-  Future<bool> signOutFromGoogle() async {
+  Future<void> signOutFromGoogle() async {
     try {
       await FirebaseAuth.instance.signOut();
-      await GoogleSignIn().disconnect();
-      await GoogleSignIn().signOut();
-      return true;
-    } on Exception catch (_) {
-      return false;
+      if(await GoogleSignIn().isSignedIn()) {
+        await GoogleSignIn().disconnect();
+        await GoogleSignIn().signOut();
+      }
+    } catch(e) {
+      debugPrint("$e");
     }
+
   }
 
   bool get isLoggedIn => FirebaseAuth.instance.currentUser != null;

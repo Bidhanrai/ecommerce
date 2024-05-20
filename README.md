@@ -46,7 +46,7 @@ review, the database will be updated in two places: within the product documents
 
 
 ## Database screenshots
-![reviews](/images/Screenshot_2024-05-04.png "reviews")
+![reviews](/images/reviews.png "reviews")
 
 ![carts](images/Screenshot_2024-05-04_at_10.42.654.png "carts")
 

@@ -59,4 +59,19 @@ class AuthCubit extends Cubit<AuthState> {
     }
 
   }
+
+
+  signInAnonymously() async {
+    emit(state.copyWith(appStatus: AppStatus.loading));
+    try {
+      UserCredential userCredential =  await FirebaseAuth.instance.signInAnonymously();
+      // await _createUser(userCredential);
+      emit(state.copyWith(appStatus: AppStatus.success));
+      cartCubit.fetchCart(userCredential.user?.uid);
+      locator<NavigationService>().pushReplacement(discoverView);
+    } catch(e) {
+      emit(state.copyWith(appStatus: AppStatus.failure));
+      toastMessage(message: "$e");
+    }
+  }
 }
