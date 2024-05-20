@@ -19,9 +19,16 @@ There are in total 6 collections. reviews, carts, users, products, orders, brand
 
 ## Challenges you faced and how you overcame them
 
-I initially had a few misconceptions about Firebase Functions, likely because I hadn't used them before. 
+- I initially had a few misconceptions about Firebase Functions, likely because I hadn't used them before. 
 However, after implementing them in the project, I found the experience quite challenging and enjoyable.
 I overcame the challenge by googling, reading documentations and little bit of chat gpt.
+
+- I have structured my collections in a normalized format to avoid data redundancy, with product reviews residing in a 
+separate collection. Consequently, querying products based on the highest reviews directly is not feasible. To address this, 
+I solution would be denormalize the data for this use case by adding or updating a new object field inside the product documents whenever 
+a user reviews a product. This object will contain the average review and the total review count. Thus, each time a user submits a 
+review, the database will be updated in two places: within the product documents and in the review collection.
+
 
 
 ## Additional done
