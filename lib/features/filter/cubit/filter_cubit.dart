@@ -77,8 +77,8 @@ String getColorName(String hexCode) {
 
 enum SortBy {
   mostRecent("Most recent"),
-  lowPrice("Lowest price"),
-  highReviews("Highest reviews");
+  lowPrice("Lowest price");
+  // highReviews("Highest reviews");
 
   final String value;
   const SortBy(this.value);

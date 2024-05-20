@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_)=>CartCubit(locator<AuthService>().user?.uid), lazy: false),
-        BlocProvider(create: (_)=>DiscoverCubit(), lazy: false),
-        BlocProvider(create: (_)=>FilterCubit(), lazy: false),
+        BlocProvider(create: (_)=>CartCubit(locator<AuthService>().user?.uid)),
+        BlocProvider(create: (_)=>DiscoverCubit()),
+        BlocProvider(create: (_)=>FilterCubit()),
       ],
       child: MaterialApp(
         title: 'Shoes Mart',

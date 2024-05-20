@@ -7,7 +7,7 @@ This is a Flutter project done as a test project for [Priority Soft](https://www
 ## Project Overview
 
 There are 18 products in total. Some products may have similar images but they are unique products.
-There is in total 6 collections. reviews, carts, users, products, orders, brands.
+There are in total 6 collections. reviews, carts, users, products, orders, brands.
 
 ## Project setup
 

@@ -24,7 +24,6 @@ class ProductCubit extends Cubit<ProductState> {
             .map((docSnapshot) => Review.fromJson(docSnapshot))
             .toList();
         emit(state.copyWith(reviewStatus: AppStatus.success, reviews: reviews));
-        // calculateAverageRatings();
       } else {
         emit(state.copyWith(reviewStatus: AppStatus.success));
       }
@@ -32,12 +31,6 @@ class ProductCubit extends Cubit<ProductState> {
       emit(state.copyWith(reviewStatus: AppStatus.failure, errorMessage: "$e"));
     }
   }
-
-  // calculateAverageRatings() {
-  //   List<int> ratings = state.reviews.map((e) => e.reviewStar).toList();
-  //   double average = ratings.sum/ratings.length;
-  //   emit(state.copyWith(averageRating: average));
-  // }
 
 
   selectColor(String color) {

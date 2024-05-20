@@ -26,6 +26,7 @@ class ErrorComponent extends StatelessWidget {
                   .textTheme
                   .headlineSmall
                   ?.copyWith(fontSize: 16),
+              maxLines: 5,
             ),
             const SizedBox(height: 4),
             Text(

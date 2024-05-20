@@ -10,14 +10,8 @@ import '../product/models/product.dart';
 import 'cubit/filter_state.dart';
 
 
-class FilterView extends StatefulWidget {
+class FilterView extends StatelessWidget {
   const FilterView({super.key});
-
-  @override
-  State<FilterView> createState() => _FilterViewState();
-}
-
-class _FilterViewState extends State<FilterView> {
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +52,6 @@ class _FilterViewState extends State<FilterView> {
       floatingActionButton: _actionButton(),
     );
   }
-
 
   Widget _title(String title) {
     return Padding(
