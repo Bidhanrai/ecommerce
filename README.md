@@ -28,7 +28,7 @@ I overcame the challenge by googling, reading documentations and little bit of c
 
 - I have structured my collections in a normalized format to avoid data redundancy, with product reviews residing in a 
 separate collection. Consequently, querying products based on the highest reviews directly is not feasible. To address this, 
-I solution would be denormalize the data for this use case by adding or updating a new object field inside the product documents whenever 
+the solution would be denormalize the data for this use case by adding or updating a new object field inside the product documents whenever 
 a user reviews a product. This object will contain the average review and the total review count. Thus, each time a user submits a 
 review, the database will be updated in two places: within the product documents and in the review collection.
 
