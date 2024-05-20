@@ -15,6 +15,9 @@ There are in total 6 collections. reviews, carts, users, products, orders, brand
 - cd project-directory
 - flutter pub get
 - flutter run
+- NOTE: I have also emailed you the apk at info@prioritysoft.rs where I have implemented google sign in and guest login. You can login via both. 
+But if you run the code from your device google sign in will throw error as it needs the device SHA1 key to be registered in firebase. You can use guest login.
+
 
 
 ## Challenges you faced and how you overcame them
