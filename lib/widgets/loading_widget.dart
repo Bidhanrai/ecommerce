@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
@@ -13,7 +15,7 @@ class LoadingWidget extends StatelessWidget {
         height: 24,
         width: 24,
         child: CircularProgressIndicator.adaptive(
-          backgroundColor: backgroundColor ?? Colors.white,
+          backgroundColor: backgroundColor ?? (Platform.isIOS?Colors.black:Colors.white),
           strokeWidth: 2.5,
           valueColor: AlwaysStoppedAnimation<Color>(
             valueColor ?? AppColor.blue,
